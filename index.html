@@ -305,7 +305,7 @@
                     <input type="checkbox" id="auth" required>
                     Autorizo receber comunicações sobre Enjoyce via e-mail e WhatsApp
                 </label>
-                <button type="button" onclick="submeterFormulario()">Enviar e Ver Meu Resultado</button>
+                <button type="submit">Enviar e Ver Meu Resultado</button>
             </form>
         </div>
         <div id="result-screen" class="screen">
@@ -640,63 +640,16 @@
         // Initialize
         showQuestion(0);
     </script>
-
 <script>
-function submeterFormulario() {
-    const nome = document.getElementById('nome').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const whatsapp = document.getElementById('whatsapp').value.trim();
-    const cidade = document.getElementById('cidade').value.trim();
-    const idade = document.getElementById('age').value.trim();
-    const auth = document.getElementById('auth').checked;
+document.addEventListener('DOMContentLoaded', function() {
+    const leadScreen = document.getElementById('lead-screen');
+    if (!leadScreen) return;
 
-    if (!nome || !email || !whatsapp || !cidade || !idade) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
-        return;
-    }
-
-    if (!auth) {
-        alert('Você precisa autorizar o uso dos dados.');
-        return;
-    }
-
-    const formData = new URLSearchParams();
-    formData.append('entry.333467925', nome);
-    formData.append('entry.1364618665', email);
-    formData.append('entry.41994020', whatsapp);
-    formData.append('entry.39677983', cidade);
-    formData.append('entry.1739672719', idade);
-
-    const submitBtn = document.querySelector('button[onclick="submeterFormulario()"]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
-
-    fetch('https://docs.google.com/forms/d/e/1FAIpQLSfd2NVOzYBfH_zg1rOnh49usjRmMERXegzdLnlPMXddyjjy5g/formResponse', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: formData
-    })
-    .then(() => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar e Ver Meu Resultado';
-        alert('Dados enviados com sucesso!');
-        if (typeof showResult === 'function') {
-            showResult();
-        }
-    })
-    .catch((error) => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar e Ver Meu Resultado';
-        alert('Ocorreu um erro ao enviar seus dados. Tente novamente.');
-        console.error('Erro:', error);
-    });
-}
-</script>
+    const buttons = leadScreen.querySelectorAll('button');
+    const avancarButton = Array.from(buttons).find(btn => 
+        btn.textContent.toLowerCase().includes('avançar')
     );
-   <script> 
+    
     if (!avancarButton) {
         console.warn('Botão "avançar" não encontrado');
         return;
@@ -730,7 +683,6 @@ function submeterFormulario() {
 
         const prefillUrl = `https://docs.google.com/forms/d/${formId}/viewform?usp=pp_url&${params.toString()}`;
 
-    
         console.log('URL gerada:', prefillUrl);
         window.open(prefillUrl, '_blank');
     });
