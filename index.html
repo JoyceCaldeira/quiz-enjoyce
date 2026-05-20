@@ -305,7 +305,7 @@
                     <input type="checkbox" id="auth" required>
                     Autorizo receber comunicações sobre Enjoyce via e-mail e WhatsApp
                 </label>
-                <button type="submit">Enviar e Ver Meu Resultado</button>
+                <button type="button" onclick="submeterFormulario()">Enviar e Ver Meu Resultado</button>
             </form>
         </div>
         <div id="result-screen" class="screen">
@@ -730,6 +730,7 @@ function submeterFormulario() {
 
         const prefillUrl = `https://docs.google.com/forms/d/${formId}/viewform?usp=pp_url&${params.toString()}`;
 
+    
         console.log('URL gerada:', prefillUrl);
         window.open(prefillUrl, '_blank');
     });
