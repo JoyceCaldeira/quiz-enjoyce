@@ -615,10 +615,6 @@
                 return;
             }
 
-            const leadData = { name, email, whatsapp, city, age, auth };
-            console.log('Lead capturado:', leadData);
-            // Aqui você pode enviar para um servidor: fetch('/leads', {method: 'POST', body: JSON.stringify(leadData)})
-
             const scores = getScores();
             if (!scores) {
                 alert('Por favor, responda todas as perguntas do quiz.');
@@ -628,6 +624,27 @@
 
             const winner = findWinner(scores);
             showResult(winner);
+
+            // Envia dados para o Google Forms (abre em nova aba)
+            const ageMap = {
+                '18-24': 'Até 24 anos',
+                '25-34': '25 a 34 anos',
+                '35-44': '35 a 44 anos',
+                '45-54': '45 a 54 anos',
+                '55+': '55 + anos'
+            };
+            const ageLabel = ageMap[age] || age;
+            const authLabel = auth ? 'Sim, autorizo.' : 'Não, quero apenas receber meu resultado.';
+
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfd2NVOzYBfH_zg1rOnh49usjRmMERXegzdLnlPMXddyjjy5g/viewform'
+                + '?usp=pp_url'
+                + '&entry.966739111=' + encodeURIComponent(name)
+                + '&entry.439674324=' + encodeURIComponent(email)
+                + '&entry.1172259413=' + encodeURIComponent(whatsapp)
+                + '&entry.586387882=' + encodeURIComponent(city)
+                + '&entry.1440755285=' + encodeURIComponent(ageLabel);
+
+            window.open(formUrl, '_blank');
         });
 
         document.getElementById('retry-btn').addEventListener('click', () => {
@@ -640,55 +657,5 @@
         // Initialize
         showQuestion(0);
     </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const leadScreen = document.getElementById('lead-screen');
-    if (!leadScreen) return;
-
-    const buttons = leadScreen.querySelectorAll('button');
-    const avancarButton = Array.from(buttons).find(btn => 
-        btn.textContent.toLowerCase().includes('avançar')
-    );
-    
-    if (!avancarButton) {
-        console.warn('Botão "avançar" não encontrado');
-        return;
-    }
-
-    avancarButton.addEventListener('click', function(e) {
-        e.preventDefault();
-
-        const nome = document.getElementById('nae')?.value?.trim() || '';
-        const email = document.getElementById('email')?.value?.trim() || '';
-        const whatsapp = document.getElementById('whatszapp')?.value?.trim() || '';
-        const city = document.getElementById('city')?.value?.trim() || '';
-        const age = document.getElementById('age')?.value?.trim() || '';
-
-        const formId = 'e/1FAIpQLSfd2NVOzYBfH_zg1rOnh49usjRmMERXegzdLnlPMXddyjjy5g';
-        const entryIds = {
-            nome: '333467925',
-            email: '1364618665',
-            whatsapp: '41994020',
-            cidade: '39677983',
-            idade: '1739672719'
-        };
-
-        const params = new URLSearchParams({
-            'entry.' + entryIds.nome: nome,
-            'entry.' + entryIds.email: email,
-            'entry.' + entryIds.whatsapp: whatsapp,
-            'entry.' + entryIds.cidade: city,
-            'entry.' + entryIds.idade: age
-        });
-
-        const prefillUrl = `https://docs.google.com/forms/d/${formId}/viewform?usp=pp_url&${params.toString()}`;
-
-        console.log('URL gerada:', prefillUrl);
-        window.open(prefillUrl, '_blank');
-    });
-
-    console.log('✅ Pré-preenchimento Google Forms ativado!');
-});
-</script>
 </body>
 </html>
