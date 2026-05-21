@@ -625,7 +625,7 @@
             const winner = findWinner(scores);
             showResult(winner);
 
-            // Envia dados para o Google Forms (abre em nova aba)
+            // Envia dados silenciosamente para o Google Forms (sem abrir nova aba)
             const ageMap = {
                 '18-24': 'Até 24 anos',
                 '25-34': '25 a 34 anos',
@@ -634,17 +634,21 @@
                 '55+': '55 + anos'
             };
             const ageLabel = ageMap[age] || age;
-            const authLabel = auth ? 'Sim, autorizo.' : 'Não, quero apenas receber meu resultado.';
 
-            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfd2NVOzYBfH_zg1rOnh49usjRmMERXegzdLnlPMXddyjjy5g/viewform'
-                + '?usp=pp_url'
-                + '&entry.966739111=' + encodeURIComponent(name)
-                + '&entry.439674324=' + encodeURIComponent(email)
-                + '&entry.1172259413=' + encodeURIComponent(whatsapp)
-                + '&entry.586387882=' + encodeURIComponent(city)
-                + '&entry.1440755285=' + encodeURIComponent(ageLabel);
+            const formSubmitUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfd2NVOzYBfH_zg1rOnh49usjRmMERXegzdLnlPMXddyjjy5g/formResponse';
 
-            window.open(formUrl, '_blank');
+            const formData = new FormData();
+            formData.append('entry.966739111', name);
+            formData.append('entry.439674324', email);
+            formData.append('entry.1172259413', whatsapp);
+            formData.append('entry.586387882', city);
+            formData.append('entry.1440755285', ageLabel);
+
+            fetch(formSubmitUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).catch(() => {}); // ignora erro de CORS — o envio funciona mesmo assim
         });
 
         document.getElementById('retry-btn').addEventListener('click', () => {
